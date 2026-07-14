@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel | Cawnpore Opticals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👓</text></svg>" />
+</head>
+<body class="admin-body" data-page="admin">
+  <!-- Login -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="logo-mark">CO</span>
+        <div>
+          <strong>Cawnpore Opticals</strong>
+          <span>Admin Panel</span>
+        </div>
+      </div>
+      <h1>Sign in</h1>
+      <p class="login-hint">Default: <code>admin</code> / <code>admin123</code></p>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-user">Username</label>
+          <input id="login-user" name="username" required autocomplete="username" placeholder="admin" />
+        </div>
+        <div class="form-group">
+          <label for="login-pass">Password</label>
+          <input id="login-pass" name="password" type="password" required autocomplete="current-password" placeholder="••••••••" />
+        </div>
+        <p id="login-error" class="form-error is-hidden" hidden role="alert">Invalid username or password. Use admin / admin123</p>
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block btn-lg">Login</button>
+      </form>
+      <a href="index.html" class="back-store">← Back to store</a>
+    </div>
+  </div>
+
+  <!-- Dashboard shell -->
+  <div id="admin-app" class="admin-app is-hidden" hidden>
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-brand">
+        <span class="logo-mark">CO</span>
+        <div>
+          <strong>Admin</strong>
+          <span>Cawnpore Opticals</span>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <button type="button" class="admin-nav-btn active" data-view="dashboard">Dashboard</button>
+        <button type="button" class="admin-nav-btn" data-view="products">Glasses / Products</button>
+        <button type="button" class="admin-nav-btn" data-view="orders">Orders</button>
+      </nav>
+      <div class="admin-sidebar-foot">
+        <a href="index.html" class="btn btn-outline btn-sm" target="_blank">View store</a>
+        <button type="button" class="btn btn-sm" id="logout-btn">Logout</button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button type="button" class="admin-menu-toggle" id="admin-menu-toggle" aria-label="Menu">☰</button>
+        <h1 id="admin-page-title">Dashboard</h1>
+        <div class="admin-topbar-actions">
+          <span class="admin-user">👤 Admin</span>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <!-- Dashboard -->
+        <section id="view-dashboard" class="admin-view">
+          <div class="stat-grid" id="stat-grid"></div>
+          <div class="admin-two-col">
+            <div class="admin-card">
+              <div class="admin-card-head">
+                <h2>Recent orders</h2>
+                <button type="button" class="btn btn-sm btn-outline" data-view="orders">View all</button>
+              </div>
+              <div id="recent-orders" class="table-wrap"></div>
+            </div>
+            <div class="admin-card">
+              <div class="admin-card-head">
+                <h2>Quick actions</h2>
+              </div>
+              <div class="quick-actions">
+                <button type="button" class="btn btn-primary" id="qa-add-product">+ Add new glasses</button>
+                <button type="button" class="btn btn-outline" data-view="orders">Manage orders</button>
+                <button type="button" class="btn btn-outline" id="qa-reset-products">Reset products to seed</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Products -->
+        <section id="view-products" class="admin-view" hidden>
+          <div class="admin-toolbar">
+            <input type="search" id="product-search" placeholder="Search products..." class="admin-search" />
+            <select id="product-filter-cat">
+              <option value="all">All categories</option>
+              <option value="eyeglasses">Eyeglasses</option>
+              <option value="sunglasses">Sunglasses</option>
+              <option value="kids">Kids</option>
+              <option value="accessories">Accessories</option>
+            </select>
+            <button type="button" class="btn btn-primary" id="btn-add-product">+ Add product</button>
+          </div>
+          <div class="admin-card table-wrap">
+            <table class="admin-table" id="products-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Badge</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Orders -->
+        <section id="view-orders" class="admin-view" hidden>
+          <div class="admin-toolbar">
+            <input type="search" id="order-search" placeholder="Search by ID, name, phone..." class="admin-search" />
+            <select id="order-filter-status">
+              <option value="all">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <button type="button" class="btn btn-primary" id="btn-create-order">+ Manual order</button>
+          </div>
+          <div class="admin-card table-wrap">
+            <table class="admin-table" id="orders-table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product modal -->
+  <div id="product-modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-product-modal></div>
+    <div class="modal-panel admin-modal-panel" role="dialog">
+      <button type="button" class="modal-close" data-close-product-modal aria-label="Close">✕</button>
+      <h2 id="product-modal-title">Add product</h2>
+      <form id="product-form" class="admin-form">
+        <input type="hidden" id="pf-id" />
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pf-name">Name *</label>
+            <input id="pf-name" required placeholder="Frame name" />
+          </div>
+          <div class="form-group">
+            <label for="pf-brand">Brand</label>
+            <input id="pf-brand" placeholder="Cawnpore" value="Cawnpore" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pf-category">Category *</label>
+            <select id="pf-category" required>
+              <option value="eyeglasses">Eyeglasses</option>
+              <option value="sunglasses">Sunglasses</option>
+              <option value="kids">Kids</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pf-gender">Gender</label>
+            <select id="pf-gender">
+              <option value="unisex">Unisex</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="kids">Kids</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pf-price">Price (₹) *</label>
+            <input id="pf-price" type="number" min="0" step="1" required />
+          </div>
+          <div class="form-group">
+            <label for="pf-original">Original price (₹)</label>
+            <input id="pf-original" type="number" min="0" step="1" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pf-stock">Stock</label>
+            <input id="pf-stock" type="number" min="0" value="50" />
+          </div>
+          <div class="form-group">
+            <label for="pf-badge">Badge</label>
+            <select id="pf-badge">
+              <option value="">None</option>
+              <option value="New">New</option>
+              <option value="Bestseller">Bestseller</option>
+              <option value="Hot">Hot</option>
+              <option value="Sale">Sale</option>
+              <option value="Premium">Premium</option>
+              <option value="Kids">Kids</option>
+              <option value="Essential">Essential</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pf-image">Frame style (illustration)</label>
+            <select id="pf-image"></select>
+          </div>
+          <div class="form-group">
+            <label for="pf-rating">Rating</label>
+            <input id="pf-rating" type="number" min="0" max="5" step="0.1" value="4.5" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pf-colors">Colors (comma-separated)</label>
+          <input id="pf-colors" placeholder="Black, Gold, Silver" />
+        </div>
+        <div class="form-group">
+          <label for="pf-sizes">Sizes (comma-separated)</label>
+          <input id="pf-sizes" placeholder="S, M, L or Free Size" />
+        </div>
+        <div class="form-group">
+          <label for="pf-features">Features (comma-separated)</label>
+          <input id="pf-features" placeholder="UV400, Polarized, Metal Frame" />
+        </div>
+        <div class="form-group">
+          <label for="pf-desc">Description</label>
+          <textarea id="pf-desc" rows="3" placeholder="Product description"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" data-close-product-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order detail / manual order modal -->
+  <div id="order-modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-order-modal></div>
+    <div class="modal-panel admin-modal-panel wide" role="dialog">
+      <button type="button" class="modal-close" data-close-order-modal aria-label="Close">✕</button>
+      <h2 id="order-modal-title">Order details</h2>
+      <div id="order-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Manual order form modal -->
+  <div id="manual-order-modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-manual-order></div>
+    <div class="modal-panel admin-modal-panel wide" role="dialog">
+      <button type="button" class="modal-close" data-close-manual-order aria-label="Close">✕</button>
+      <h2>Create manual order</h2>
+      <form id="manual-order-form" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mo-name">Customer name *</label>
+            <input id="mo-name" required />
+          </div>
+          <div class="form-group">
+            <label for="mo-phone">Phone *</label>
+            <input id="mo-phone" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mo-email">Email</label>
+            <input id="mo-email" type="email" />
+          </div>
+          <div class="form-group">
+            <label for="mo-payment">Payment</label>
+            <select id="mo-payment">
+              <option value="cod">Cash on Delivery</option>
+              <option value="upi">UPI</option>
+              <option value="card">Card</option>
+              <option value="netbanking">Net Banking</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mo-address">Address *</label>
+          <textarea id="mo-address" rows="2" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="mo-product">Product *</label>
+          <select id="mo-product" required></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mo-qty">Quantity</label>
+            <input id="mo-qty" type="number" min="1" value="1" />
+          </div>
+          <div class="form-group">
+            <label for="mo-status">Status</label>
+            <select id="mo-status">
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mo-notes">Notes</label>
+          <input id="mo-notes" placeholder="Optional notes" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" data-close-manual-order>Cancel</button>
+          <button type="submit" class="btn btn-primary">Create order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Cawnpore Opticals — store location, eye tests, and support." />
+  <title>Contact | Cawnpore Opticals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👓</text></svg>" />
+</head>
+<body data-page="contact">
+  <div class="top-bar">Free shipping on orders above ₹999 · Eye test at select stores</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Cawnpore Opticals Home">
+        <span class="logo-mark">CO</span>
+        <span class="logo-text"><strong>Cawnpore Opticals</strong><span>Since 1998</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="shop.html?category=eyeglasses">Eyeglasses</a>
+        <a href="shop.html?category=sunglasses">Sunglasses</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <form class="header-search" role="search">
+          <input type="search" placeholder="Search frames..." aria-label="Search" />
+          <button type="submit" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </button>
+        </form>
+        <a href="cart.html" class="icon-btn" aria-label="Shopping cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span class="cart-badge" data-cart-count hidden>0</span>
+        </a>
+        <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Home</a> / Contact</div>
+      <h1>Get in Touch</h1>
+      <p>We're here to help with orders, prescriptions, and appointments</p>
+    </div>
+  </div>
+
+  <main class="container contact-layout">
+    <div class="contact-info">
+      <h2>Visit & reach us</h2>
+      <p>Drop by our flagship store or send a message — we typically reply within one business day.</p>
+      <div class="contact-detail">
+        <span>📍</span>
+        <div>
+          <strong>Address</strong>
+          42 Mall Road, Civil Lines<br />Kanpur, Uttar Pradesh 208001
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span>📞</span>
+        <div>
+          <strong>Phone</strong>
+          +91 512 123 4567<br />+91 98765 43210
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span>✉️</span>
+        <div>
+          <strong>Email</strong>
+          hello@cawnporeopticals.com<br />support@cawnporeopticals.com
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span>🕐</span>
+        <div>
+          <strong>Hours</strong>
+          Mon–Sat: 10:00 AM – 8:00 PM<br />Sunday: 11:00 AM – 6:00 PM
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-card">
+      <h2>Send a message</h2>
+      <form id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" required placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" required placeholder="Mobile number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject" name="subject" required>
+            <option value="">Select a topic</option>
+            <option value="order">Order enquiry</option>
+            <option value="prescription">Prescription / eye test</option>
+            <option value="appointment">Store appointment</option>
+            <option value="return">Return / exchange</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required placeholder="How can we help?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <span class="logo-mark">CO</span>
+            <span class="logo-text"><strong>Cawnpore Opticals</strong><span>Since 1998</span></span>
+          </a>
+          <p>Premium eyewear from the heart of Kanpur.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <a href="shop.html">All Products</a>
+          <a href="shop.html?category=eyeglasses">Eyeglasses</a>
+          <a href="shop.html?category=sunglasses">Sunglasses</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <a href="contact.html">Shipping & Returns</a>
+          <a href="contact.html">Warranty</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Cawnpore Opticals. All rights reserved.</span>
+        <span>Crafted with care in Kanpur, India</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
