@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await renderProductsTable();
       } catch (err) {
         console.error(err);
-        showToast("Reset failed — is the server running?");
+        showToast("Reset failed — check Supabase config or local server");
       }
     }
   });

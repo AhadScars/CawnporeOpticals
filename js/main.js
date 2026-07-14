@@ -6,8 +6,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     await refreshProducts();
   } catch (err) {
-    console.error("Failed to load products from SQLite API:", err);
-    showToast("Could not load catalog. Is the server running?");
+    console.error("Failed to load products:", err);
+    const usingSb = typeof useSupabase === "function" && useSupabase();
+    showToast(
+      usingSb
+        ? "Could not load catalog. Check Supabase config / RLS."
+        : "Could not load catalog. Set Supabase in js/config.js or run server.py"
+    );
   }
   const page = document.body.dataset.page;
   if (page === "home") initHome();

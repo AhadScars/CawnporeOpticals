@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Cawnpore Opticals — HTTP server with SQLite backend.
+Cawnpore Opticals — local HTTP server with SQLite backend.
 Serves static files + REST API for products & orders.
+
+For production use Vercel (static) + Supabase (see js/config.js and
+supabase/schema.sql). This server is the offline/local fallback when
+Supabase keys are not set in js/config.js.
+
 Usage: python3 server.py
 """
 

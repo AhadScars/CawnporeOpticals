@@ -1,133 +1,73 @@
 # Cawnpore Opticals
 
-Premium eyewear e-commerce site for **Cawnpore Opticals** (Kanpur) — eyeglasses, sunglasses, kids frames, and accessories. Includes a responsive storefront, shopping cart, checkout, and an admin panel backed by **SQLite**.
+Premium eyewear e-commerce for **Cawnpore Opticals** (Kanpur) — storefront, cart, checkout, and admin.
 
-No third-party Python packages required — only the standard library.
+| Production | Local fallback |
+|------------|----------------|
+| **Vercel** (static) + **Supabase** (PostgreSQL) | Python `server.py` + SQLite |
+
+**Full walkthrough:** see **[SETUP.md](SETUP.md)** (Supabase project → env vars → Vercel deploy).
+
+## Quick deploy
+
+1. **Supabase:** create a project → run [`supabase/schema.sql`](supabase/schema.sql) in the SQL Editor → copy **Project URL** + **anon** key.
+2. **Vercel:** import the repo → set env vars → deploy.
+
+| Env var | Value |
+|---------|--------|
+| `SUPABASE_URL` | `https://xxxx.supabase.co` |
+| `SUPABASE_ANON_KEY` | anon public key |
+
+Build runs `npm run build`, which writes `js/config.js` from those env vars. That file is **gitignored** so keys never go into git.
+
+```bash
+# Local (optional)
+cp .env.example .env   # fill in keys
+npm run build
+npm run dev:static     # http://localhost:5000 with Supabase
+# or
+npm run dev            # SQLite via server.py (placeholders in config)
+```
 
 ## Stack
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | HTML, CSS, vanilla JavaScript |
-| Backend | Python 3 (`server.py`) — `http.server` + REST API |
-| Database | SQLite (`data/cawnpore.db`) |
-| Cart | Browser `localStorage` |
+| Frontend | HTML, CSS, vanilla JS |
+| Hosting | Vercel |
+| Database | Supabase (PostgreSQL + REST) |
+| Local API | `server.py` + SQLite (when config is placeholders) |
+| Cart | `localStorage` |
 
 ## Features
 
-### Storefront
-- **Pages:** Home, Shop, Product detail, Cart & checkout, About, Contact
-- Product filters (category, search), ratings, badges, and promo banners
-- Cart stored in the browser; orders saved to SQLite on checkout
-- Categories: eyeglasses, sunglasses, kids, accessories
-
-### Admin (`/admin.html`)
-- Login: `admin` / `admin123`
-- **Products:** full CRUD (create, edit, delete, reseed catalog)
-- **Orders:** list, update status, delete, manual create
-- **Dashboard:** stats from the database
-
-## Requirements
-
-- **Python 3.8+** (uses only the standard library)
-- No `pip install` needed
-
-## Quick start
-
-### Linux / macOS
-
-```bash
-python3 server.py
-```
-
-### Windows
-
-Double-click `run.bat`, or:
-
-```bat
-python server.py
-```
-
-### Custom port
-
-```bash
-PORT=8080 python3 server.py
-```
-
-Then open:
-
-| URL | Purpose |
-|-----|---------|
-| http://localhost:5000 | Storefront |
-| http://localhost:5000/admin.html | Admin panel |
-
-> Always use `server.py` (not `python -m http.server`) so the REST API and SQLite backend work.
-
-## API
-
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/health` | Health check |
-| GET | `/api/products` | List products |
-| GET | `/api/products/:id` | Get one product |
-| POST | `/api/products` | Create product |
-| PUT | `/api/products/:id` | Update product |
-| DELETE | `/api/products/:id` | Delete product |
-| POST | `/api/products/reset` | Reseed catalog from seed file |
-| GET | `/api/orders` | List orders |
-| GET | `/api/orders/:id` | Get one order |
-| POST | `/api/orders` | Create order |
-| PUT | `/api/orders/:id` | Update order (e.g. status) |
-| DELETE | `/api/orders/:id` | Delete order |
-| GET | `/api/stats` | Dashboard stats |
+- **Storefront:** Home, Shop, Product, Cart/checkout, About, Contact
+- **Admin** (`/admin.html`): products CRUD, orders, stats — login `admin` / `admin123`
+- Auto-detects backend: real Supabase keys → Supabase; placeholders → local `/api`
 
 ## Project structure
 
 ```
-cawnporeopticals/
-├── server.py                 # HTTP server + SQLite REST API
-├── run.bat                   # Windows launcher
-├── index.html                # Home
-├── shop.html                 # Catalog
-├── product.html              # Product detail
-├── cart.html                 # Cart & checkout
-├── about.html
-├── contact.html
-├── admin.html                # Admin dashboard
-├── css/
-│   ├── style.css             # Storefront styles
-│   └── admin.css             # Admin styles
+├── SETUP.md                 # Step-by-step Supabase + Vercel
+├── supabase/schema.sql      # Tables, RLS, seed
 ├── js/
-│   ├── main.js               # Shared UI (nav, search, etc.)
-│   ├── products.js           # Products API + UI helpers
-│   ├── orders.js             # Orders API client
-│   ├── cart.js               # Cart (localStorage)
-│   └── admin.js              # Admin panel logic
-├── data/
-│   ├── cawnpore.db           # SQLite DB (auto-created)
-│   └── seed_products.json    # Default catalog seed
-└── assets/                   # Static assets
+│   ├── config.example.js    # Template (committed)
+│   ├── config.js            # Generated from env (gitignored)
+│   ├── db.js                # Supabase / local adapter
+│   ├── products.js, orders.js, cart.js, main.js, admin.js
+├── scripts/build-config.js  # npm run build
+├── package.json
+├── vercel.json
+├── server.py                # Local SQLite API
+└── data/seed_products.json
 ```
 
-## Database
+## Security
 
-On first run, `server.py`:
-
-1. Creates `data/` if needed
-2. Creates `products` and `orders` tables
-3. Seeds products from `data/seed_products.json` when the catalog is empty
-
-| Table | Purpose |
-|-------|---------|
-| `products` | Catalog (price, stock, colors, sizes, etc.) |
-| `orders` | Customer orders (items JSON, totals, status) |
-
-## Notes
-
-- Cart stays in browser `localStorage` until checkout
-- Products and orders persist in SQLite
-- Change admin credentials in the frontend admin script for production use
-- Bind address is `0.0.0.0` (reachable on your LAN); default port is `5000`
+- Use only the **anon** key in the browser / Vercel env
+- Never commit `.env` or `js/config.js` with real keys
+- Never ship the **service_role** key to the client
+- Admin login is client-side demo only — tighten RLS + Auth for production
 
 ## License
 

@@ -1,0 +1,13 @@
+{
+  "name": "cawnporeopticals",
+  "private": true,
+  "description": "Cawnpore Opticals — static storefront (Vercel + Supabase)",
+  "scripts": {
+    "build": "node scripts/build-config.js",
+    "dev": "python3 server.py",
+    "dev:static": "python3 -m http.server 5000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

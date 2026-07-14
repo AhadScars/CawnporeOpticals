@@ -1,4 +1,4 @@
-/* Cawnpore Opticals — Products API client (SQLite backend) */
+/* Cawnpore Opticals — Products API client (Supabase or local /api) */
 const API = "/api";
 const IMAGE_STYLES = [
   "aviator", "blueblocker", "round", "cateye", "square", "wayfarer",
@@ -13,7 +13,7 @@ const CATEGORIES = [
   { id: "accessories", name: "Accessories", icon: "✨" },
 ];
 
-/** In-memory cache of catalog from SQLite */
+/** In-memory cache of catalog */
 let PRODUCTS = [];
 
 async function apiJson(url, options = {}) {
@@ -35,41 +35,31 @@ async function apiJson(url, options = {}) {
 }
 
 async function refreshProducts() {
-  PRODUCTS = await apiJson(`${API}/products`);
+  PRODUCTS = await dbListProducts();
   window.dispatchEvent(new CustomEvent("products-updated", { detail: PRODUCTS }));
   return PRODUCTS;
 }
 
 async function createProduct(data) {
-  const product = await apiJson(`${API}/products`, {
-    method: "POST",
-    body: JSON.stringify(normalizeProduct(data)),
-  });
+  const product = await dbCreateProduct(normalizeProduct(data));
   await refreshProducts();
   return product;
 }
 
 async function updateProduct(id, data) {
-  const product = await apiJson(`${API}/products/${encodeURIComponent(id)}`, {
-    method: "PUT",
-    body: JSON.stringify(normalizeProduct({ ...data, id })),
-  });
+  const product = await dbUpdateProduct(id, normalizeProduct({ ...data, id }));
   await refreshProducts();
   return product;
 }
 
 async function deleteProduct(id) {
-  await apiJson(`${API}/products/${encodeURIComponent(id)}`, { method: "DELETE" });
+  await dbDeleteProduct(id);
   await refreshProducts();
   return true;
 }
 
 async function resetProductsToSeed() {
-  const result = await apiJson(`${API}/products/reset`, {
-    method: "POST",
-    body: JSON.stringify({}),
-  });
-  PRODUCTS = result.products || [];
+  PRODUCTS = await dbResetProducts();
   window.dispatchEvent(new CustomEvent("products-updated", { detail: PRODUCTS }));
   return PRODUCTS;
 }
@@ -123,7 +113,7 @@ function getProductById(id) {
 
 async function fetchProductById(id) {
   try {
-    const p = await apiJson(`${API}/products/${encodeURIComponent(id)}`);
+    const p = await dbGetProduct(id);
     const idx = PRODUCTS.findIndex((x) => x.id === id);
     if (idx >= 0) PRODUCTS[idx] = p;
     else PRODUCTS.push(p);
